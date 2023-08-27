@@ -1,6 +1,6 @@
 FLAGS = -g -f elf64
 
-all: bin/hello_world bin/read_file bin/print_uint64
+all: bin/hello_world bin/read_file bin/print_uint64 bin/argc
 
 bin/hello_world: hello_world.o
 	ld -o $@ $<
@@ -18,6 +18,12 @@ bin/print_uint64: print_uint64.o
 	ld -o $@ $<
 
 print_uint64.o: print_uint64.asm
+	nasm ${FLAGS} $<
+
+bin/argc: argc.o
+	ld -o $@ $<
+
+argc.o: argc.asm
 	nasm ${FLAGS} $<
 
 clean:
