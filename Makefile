@@ -1,11 +1,15 @@
-TARGETS=hello_world
+all: bin/hello_world bin/read_file
 
-all: bin/$(TARGETS)
-
-bin/$(TARGETS): $(TARGETS).o
+bin/hello_world: hello_world.o
 	ld -o $@ $<
 
-$(TARGETS).o: $(TARGETS).asm
+hello_world.o: hello_world.asm
+	nasm -f elf64 $<
+
+bin/read_file: read_file.o
+	ld -o $@ $<
+
+read_file.o: read_file.asm
 	nasm -f elf64 $<
 
 clean:
