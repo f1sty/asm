@@ -6,7 +6,7 @@ bin/$(TARGETS): $(TARGETS).o
 	ld -o $@ $<
 
 $(TARGETS).o: $(TARGETS).asm
-	nasm -felf64 $<
+	nasm -f elf64 $<
 
 clean:
 	rm -rf *.o
