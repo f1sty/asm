@@ -1,16 +1,24 @@
-all: bin/hello_world bin/read_file
+FLAGS = -g -f elf64
+
+all: bin/hello_world bin/read_file bin/print_uint64
 
 bin/hello_world: hello_world.o
 	ld -o $@ $<
 
 hello_world.o: hello_world.asm
-	nasm -f elf64 $<
+	nasm ${FLAGS} $<
 
 bin/read_file: read_file.o
 	ld -o $@ $<
 
 read_file.o: read_file.asm
-	nasm -f elf64 $<
+	nasm ${FLAGS} $<
+
+bin/print_uint64: print_uint64.o
+	ld -o $@ $<
+
+print_uint64.o: print_uint64.asm
+	nasm ${FLAGS} $<
 
 clean:
 	rm -rf *.o
