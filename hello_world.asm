@@ -4,7 +4,7 @@ BITS 64
 %define SYS_EXIT 60
 
 segment .text
-global _start
+  global _start
 _start:
   mov rdi, 1
   mov rsi, string
@@ -17,5 +17,5 @@ _start:
   syscall
   
 segment .data
-string db "Hello, world", 10
-len    equ $ - string
+string: db  "Hello, world", 10
+len:    equ $ - string
