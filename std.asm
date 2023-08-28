@@ -37,11 +37,11 @@ print_cstr:
   mov rax, SYS_WRITE
   .next_char:
   cmp byte [rsi], 0
-  jz .end
+  jz .break
   syscall
   inc rsi
   jmp .next_char
-  .end:
+  .break:
 
   ret
 
@@ -49,8 +49,7 @@ print_new_line:
   mov rdi, STDOUT
   mov rsi, new_line
   mov rdx, 2
-  mov rax, SYS_WRITE
-  syscall
+  call print
 
   ret
 
@@ -89,8 +88,7 @@ print_uint64:
   mov rsi, rdi       ; where to start from
   mov rdi, STDOUT
   mov rdx, rcx       ; string len is in `rbx`
-  mov rax, SYS_WRITE
-  syscall
+  call print
 
   ret
 
