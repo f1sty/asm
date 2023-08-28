@@ -1,5 +1,5 @@
 FLAGS = -g -f elf64
-TARGETS = hello_world read_file print_uint64 argc
+TARGETS = hello_world read_file print_uint64 argc argv
 
 all: bin $(TARGETS)
 
