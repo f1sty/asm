@@ -30,6 +30,21 @@ print:
 
   ret
 
+print_cstr:
+  mov rsi, rdi
+  mov rdi, STDOUT
+  mov rdx, 1
+  mov rax, SYS_WRITE
+  .next_char:
+  cmp byte [rsi], 0
+  jz .end
+  syscall
+  inc rsi
+  jmp .next_char
+  .end:
+
+  ret
+
 print_new_line:
   mov rdi, STDOUT
   mov rsi, new_line
