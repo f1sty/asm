@@ -1,32 +1,19 @@
 FLAGS = -g -f elf64
+TARGETS = hello_world read_file print_uint64 argc
 
-all: bin/hello_world bin/read_file bin/print_uint64 bin/argc
+all: bin $(TARGETS)
 
-bin/hello_world: hello_world.o
+bin:
+	mkdir bin
+
+$(TARGETS): %: %.o
 	ld -o $@ $<
+	mv $@ bin
 
-hello_world.o: hello_world.asm
-	nasm ${FLAGS} $<
-
-bin/read_file: read_file.o
-	ld -o $@ $<
-
-read_file.o: read_file.asm
-	nasm ${FLAGS} $<
-
-bin/print_uint64: print_uint64.o
-	ld -o $@ $<
-
-print_uint64.o: print_uint64.asm
-	nasm ${FLAGS} $<
-
-bin/argc: argc.o
-	ld -o $@ $<
-
-argc.o: argc.asm
-	nasm ${FLAGS} $<
+%.o: %.asm
+	nasm $(FLAGS) $<
 
 clean:
-	rm -rf *.o
+	rm -rf bin $(TARGETS:=.o)
 
 .PHONY: all clean
