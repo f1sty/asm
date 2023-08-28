@@ -14,6 +14,6 @@ $(TARGETS): bin/%: %.o
 	nasm $(FLAGS) $<
 
 clean:
-	rm -rf bin $(TARGETS:=.o)
+	rm -rf bin $(NAMES:=.o)
 
 .PHONY: all clean
