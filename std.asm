@@ -93,4 +93,4 @@ print_uint64:
   ret
 
 segment .data
-new_line:   db 13, 10
+new_line:   db `\n`
