@@ -1,8 +1,5 @@
-; print arguments count
+; print argument
 %include "std.asm"
-
-%define RADIX 10
-%define BUFFER_SIZE 32
 
 segment .text
   global _start
@@ -35,6 +32,3 @@ segment .data
 argv:       db "argv: "
 argv_len:   equ $ - argv
 space:      db " ", 0
-
-segment .bss
-buffer: resb BUFFER_SIZE
