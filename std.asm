@@ -54,15 +54,14 @@ print_new_line:
 
   ret
 
-; TODO: probably there is more efficient way to do it
 clear_buffer:
+  xor rax, rax
   mov r8, rdi
-  mov r9, r8
-  add r9, rsi
+  add r8, rsi
   .loop:
-  mov byte [r8], 0
-  inc r8
-  cmp r8, r9
+  stosb
+  inc rdi
+  cmp rdi, r8
   jl .loop
 
   ret
