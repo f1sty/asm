@@ -77,7 +77,7 @@ print_uint64:
   xor rdx, rdx       ; set msb in `div` to 0
   .next_digit:
   div rbx
-  add rdx, 48        ; add '0' ascii code to translate into digit char
+  add rdx, '0'       ; add '0' ascii code to translate into digit char
   mov byte [rdi], dl ; adding digits from the end of the buffer
   dec rdi            ; `rdi` will be used to get string length later
   xor rdx, rdx
