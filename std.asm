@@ -86,6 +86,7 @@ print_uint64:
   sub rcx, rdi       ; length(buffer[rdi]) -> rcx
 
   mov rsi, rdi       ; where to start from
+  inc rsi
   mov rdi, STDOUT
   mov rdx, rcx       ; string len is in `rbx`
   call print
