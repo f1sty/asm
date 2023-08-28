@@ -1,14 +1,14 @@
 FLAGS = -g -f elf64
-TARGETS = hello_world read_file print_uint64 argc argv
+NAMES = hello_world read_file print_uint64 argc argv
+TARGETS = $(NAMES:%=bin/%)
 
 all: bin $(TARGETS)
 
 bin:
-	mkdir bin
+	mkdir -p bin
 
-$(TARGETS): %: %.o
+$(TARGETS): bin/%: %.o
 	ld -o $@ $<
-	mv $@ bin
 
 %.o: %.asm
 	nasm $(FLAGS) $<
