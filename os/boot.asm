@@ -1,14 +1,76 @@
 ;; implement task at the end of https://www.youtube.com/watch?v=APiHPkPmwwU
-mov ah, 0x0e ; Write Character in TTY Mode routine
-mov al, 'a'  ; character to write
-mov bl, 32   ; shift
-.next_char:
+[org 0x7c00]
+jmp start
+print_cstr:
+  mov ah, 0x0e ; Write Character in TTY Mode routine
+  lodsb
+  test al, al
+  jz .end
   int 0x10
-  inc al
-  neg bl
-  add al, bl
-  cmp al, 'z' + 1
-  jne .next_char
-jmp $
+  jmp print_cstr
+  .end:
+  ret
+print_nl:
+  mov ah, 0x0e ; Write Character in TTY Mode routine
+  mov al, 10
+  int 0x10
+  mov ah, 0x0e ; Write Character in TTY Mode routine
+  mov al, 13
+  int 0x10
+  ret
+read_string:
+  xor ah, ah
+  int 0x16
+  cmp al, `\r`
+  je .end
+  mov [bx], al
+  dec cx
+  test cx, cx
+  jz .end
+  inc bx
+  jmp read_string
+  .end:
+  ret
+print_uint16:
+  push 0
+  .loop:
+  xor dx, dx
+  div bx
+  add dx, '0'        ; add '0' ascii code to translate into digit char
+  push dx
+  test ax, ax
+  jnz .loop
+
+  .print:
+  pop ax
+  test ax, ax
+  jz .end
+  mov ah, 0x0e
+  int 0x10
+  jmp .print
+  .end:
+  ret
+start:
+  mov si, string
+  call print_cstr
+  mov si, login
+  call print_cstr
+  mov bx, buffer
+  mov cx, buffer_len
+  call read_string
+  call print_nl
+  mov si, buffer
+  call print_cstr
+  mov si, length
+  call print_cstr
+  mov ax, buffer_len  ; number
+  mov bx, 10          ; radix
+  call print_uint16
+  jmp $
+string: db "starting castle os...", 10, 13, 0
+login: db "login: ", 0
+length: db 10, 13, "length of the buffer: ", 0
+buffer: times 16 db 0
+buffer_len: equ $ - buffer
 times 510 - ($ - $$) db 0
 db 0x55, 0xaa
