@@ -79,26 +79,22 @@ print_uint16:
   .end:
   ret
 start:
-  mov si, string
-  call print_cstr
-  mov si, login
-  call print_cstr
-  mov bx, buffer
-  mov cx, buffer_len
-  call read_string
-  call print_nl
-  mov si, buffer
-  call print_cstr
-  call print_nl
-  mov si, password
-  call print_cstr
-  call read_string_stack
-  mov si, length
-  call print_cstr
-  mov ax, buffer_len  ; number
-  mov bx, 10          ; radix
-  call print_uint16
+  mov [disk_num], dl
+  mov ah, 2
+  mov al, 1   ; how many sectors to read
+  mov ch, 0   ; cylinder
+  mov cl, 2   ; sector
+  mov dh, 0   ; head
+  mov dl, [disk_num]
+  xor bx, bx
+  mov es, bx
+  mov bx, 0x7e00
+  int 0x13
+  mov ah, 0x0e
+  mov al, [bx]
+  int 0x10
   jmp $
+disk_num: db 0
 string: db "starting castle os...", 10, 13, 0
 login: db "login: ", 0
 password: db "password: ", 0
@@ -107,3 +103,4 @@ buffer: times 16 db 0
 buffer_len: equ $ - buffer
 times 510 - ($ - $$) db 0
 db 0x55, 0xaa
+times 512 db 'A'
