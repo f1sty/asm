@@ -79,7 +79,7 @@ print_uint16:
   .end:
   ret
 start:
-  mov [disk_num], dl
+  mov byte [disk_num], dl
   mov ah, 2
   mov al, 1   ; how many sectors to read
   mov ch, 0   ; cylinder
@@ -90,11 +90,19 @@ start:
   mov es, bx
   mov bx, 0x7e00
   int 0x13
+  jc .error
+  cmp al, 1
+  jne .error
   mov ah, 0x0e
   mov al, [bx]
   int 0x10
   jmp $
+  .error:
+  mov si, error
+  call print_cstr
+  jmp $
 disk_num: db 0
+error: db "error occured while reading sector from disk", 0
 string: db "starting castle os...", 10, 13, 0
 login: db "login: ", 0
 password: db "password: ", 0
